@@ -1,0 +1,22 @@
+import { Router } from 'express';
+import auth from './auth.routes.js';
+import products from './products.routes.js';
+import categories from './categories.routes.js';
+import customers from './customers.routes.js';
+import orders from './orders.routes.js';
+import stats from './stats.routes.js';
+import users from './users.routes.js';
+import settings from './settings.routes.js';
+import catalog from './catalog.routes.js';
+
+const r = Router();
+r.use('/auth', auth);
+r.use('/products', products);
+r.use('/categories', categories);
+r.use('/customers', customers);
+r.use('/orders', orders);
+r.use('/users', users);
+r.use('/settings', settings);
+r.use('/', stats);
+r.use('/', catalog);
+export default r;

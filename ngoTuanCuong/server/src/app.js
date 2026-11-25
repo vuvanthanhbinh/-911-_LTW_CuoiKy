@@ -1,0 +1,22 @@
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import session from 'express-session';
+import SequelizeStore from 'connect-session-sequelize';
+import { db } from './config/db.js';
+import csrf from './middleware/csrf.js';
+import errorHandler from './middleware/errorHandler.js';
+import routes from './routes/index.js';
+
+const e = process.env;
+const app = express();
+app.use(helmet());
+app.use(cors({ origin: e.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+app.use(express.json());
+const Store = SequelizeStore(session.Store);
+export const store = new Store({ db });
+app.use(session({ name: 'sid', secret: e.SESSION_SECRET || 'dev', store, resave: false, saveUninitialized: false, cookie: { httpOnly: true, sameSite: 'lax', maxAge: 864e5 } }));
+app.use(csrf);
+app.use('/api', routes);
+app.use(errorHandler);
+export default app;
